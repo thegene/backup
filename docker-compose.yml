@@ -6,8 +6,8 @@ services:
     ports:
       - '8080:80'
     links:
-      - mysql
-  mysql:
+      - db
+  db:
     image: thegene/mariadb-with-secrets
     expose:
       - '3306'
