@@ -8,8 +8,8 @@ services:
     links:
       - mysql
   mysql:
-    image: mariadb
-    environment:
-      MYSQL_ROOT_PASSWORD: example
+    image: thegene/mariadb-with-secrets
     expose:
       - '3306'
+    volumes:
+      - ${SECRETS_HOST_PATH}:/secrets
