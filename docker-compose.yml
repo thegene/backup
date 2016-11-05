@@ -8,8 +8,21 @@ services:
     links:
       - db
   db:
-    image: thegene/mariadb-with-secrets
+    build: ./db
     expose:
       - '3306'
+    volumes_from:
+      - secrets
+    entrypoint: /secrets-entrypoint.sh
+  secrets:
+    image: thegene/mounted-secrets
     volumes:
-      - ${SECRETS_HOST_PATH}:/secrets
+      - /secrets
+      - ${ENCRYPTED_SECRETS_MOUNT_PATH}:/encrypted
+      - ${KEY_MOUNT_PATH}:/keys
+    environment:
+      - SECRETS_PASSPHRASE
+
+
+volumes:
+  secrets:

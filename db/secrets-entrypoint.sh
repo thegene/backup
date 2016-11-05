@@ -1,5 +1,4 @@
 #!/bin/bash
 
-eval $(cat /secrets/secrets.txt)
-
-docker-entrypoint.sh "$@"
+echo "SOMETHING";
+env $(/secrets/secrets.sh | tr "\\n" " ") /docker-entrypoint.sh mysqld
