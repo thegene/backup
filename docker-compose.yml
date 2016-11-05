@@ -14,6 +14,10 @@ services:
     volumes_from:
       - secrets
     entrypoint: /secrets-entrypoint.sh
+  util-db:
+    image: mariadb:10.1
+    links:
+      - db
   secrets:
     image: thegene/mounted-secrets
     volumes:

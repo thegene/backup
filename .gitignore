@@ -1,1 +1,4 @@
 secrets/*
+creds/*
+encrypted/*
+keys/*
