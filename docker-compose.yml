@@ -15,9 +15,16 @@ services:
       - secrets
     entrypoint: /secrets-entrypoint.sh
   util-db:
-    image: mariadb:10.1
+    build: ./db
+    entrypoint: /util-entrypoint.sh
+    command: /mysql.sh
     links:
       - db
+    environment:
+      - host=db
+      - SECRETS_PASSPHRASE
+    volumes_from:
+      - secrets
   secrets:
     image: thegene/mounted-secrets
     volumes:
