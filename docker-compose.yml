@@ -1,15 +1,14 @@
 version: '2'
 
 services:
-  #owncloud:
-  #  image: owncloud
-  #  ports:
-  #    - '8080:80'
-  #  links:
-  #    - db
+  owncloud:
+    image: owncloud
+    ports:
+      - '8080:80'
+    links:
+      - db
   db:
-    #image: mariadb:10.1
-    image: ubuntu
+    image: mariadb:10.1
     expose:
       - '3306'
     volumes:
@@ -17,6 +16,7 @@ services:
       - ./db:/scripts
     depends_on:
       - secrets
+    entrypoint: /scripts/secrets-entrypoint.sh
   secrets:
     image: garland/aws-cli-docker
     environment:
