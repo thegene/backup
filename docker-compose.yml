@@ -1,39 +1,35 @@
 version: '2'
 
 services:
-  owncloud:
-    image: owncloud
-    ports:
-      - '8080:80'
-    links:
-      - db
+  #owncloud:
+  #  image: owncloud
+  #  ports:
+  #    - '8080:80'
+  #  links:
+  #    - db
   db:
-    build: ./db
+    #image: mariadb:10.1
+    image: ubuntu
     expose:
       - '3306'
-    volumes_from:
-      - secrets
-    entrypoint: /secrets-entrypoint.sh
-  util-db:
-    build: ./db
-    entrypoint: /util-entrypoint.sh
-    command: /mysql.sh
-    links:
-      - db
-    environment:
-      - host=db
-      - SECRETS_PASSPHRASE
-    volumes_from:
+    volumes:
+      - secrets:/secrets
+      - ./db:/scripts
+    depends_on:
       - secrets
   secrets:
-    image: thegene/mounted-secrets
-    volumes:
-      - /secrets
-      - ${ENCRYPTED_SECRETS_MOUNT_PATH}:/encrypted
-      - ${KEY_MOUNT_PATH}:/keys
+    image: garland/aws-cli-docker
     environment:
-      - SECRETS_PASSPHRASE
-
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - AWS_DEFAULT_REGION
+      - SECRETS_BUCKET
+      - SECRETS_FILE
+    volumes:
+      - secrets:/secrets
+      - ./db:/scripts
+    entrypoint: []
+    command: /scripts/get_secrets.sh
 
 volumes:
   secrets:

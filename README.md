@@ -2,20 +2,22 @@
 Spins up an owncloud instance backed by a mariadb database. With Owncloud you
 can run your own file backup application: https://owncloud.org/
 
-# Usage
-You must specify the mount point of your secrets directory.
-This direcctory contains `secrets.txt` described below:
-```
-SECRETS_HOST_PATH=/PATH/TO/secrets \
-docker-compose up
-```
+# idea on how to do secrets better:
+1. secrets container downloads specified secrets file, adds to /secrets volume
+2. call maria image with secrets entrypoint, which decrypts the secrets file using gpg and pipes that to the mysql entrypoint
 
-Once up and running, you can connect to the database at the admin prompt using
-the settings from `secrets.txt`:
-- `Database User`: `MYSQL_USER`
-- `Database password`: `MYSQL_PASSWORD`
-- `Database name`: `MYSQL_DATABASE`
-- `Database host` ("localhost" by default): `db`
+# Usage
+Secrets are stored in s3 files, so you'll need your aws creds in order to access them, and specify the bucket and file name to use:
+
+```
+docker-compose run
+  - e AWS_ACCESS_KEY_ID=<<ACCESS_KEY>>
+  - e AWS_SECRET_ACCESS_KEY=<<SECRET_KEY>>
+  - e AWS_DEFAULT_REGION=<<BUCKET_REGION>>
+  - e SECRETS_BUCKET=<<BUCKET_NAME>>
+  - e SECRETS_FILE=<<FILE_IN_BUCKET>>
+
+```
 
 ## secrets.txt
 `secrets.txt` should contain export commands for setting `ENV` variables:
