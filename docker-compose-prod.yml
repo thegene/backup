@@ -1,0 +1,35 @@
+version: '2'
+
+services:
+  owncloud:
+    image: owncloud
+    ports:
+      - '80:80'
+    links:
+      - db
+  db:
+    image: mariadb:10.1
+    expose:
+      - '3306'
+    volumes:
+      - secrets:/secrets
+      - ./db:/scripts
+    depends_on:
+      - secrets
+    entrypoint: /scripts/secrets-entrypoint.sh
+  secrets:
+    image: garland/aws-cli-docker
+    environment:
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - AWS_DEFAULT_REGION
+      - SECRETS_BUCKET
+      - SECRETS_FILE
+    volumes:
+      - secrets:/secrets
+      - ./db:/scripts
+    entrypoint: []
+    command: /scripts/get_secrets.sh
+
+volumes:
+  secrets:
