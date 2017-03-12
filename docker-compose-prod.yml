@@ -9,7 +9,7 @@ services:
       - db
     volumes:
       - /backup-server/owncloud:/var/www/html/config
-      - /backup-server/storage:/var/www/html/data
+      - /backup-server/storage/data:/var/www/html/data
   db:
     image: mariadb:10.1
     expose:
