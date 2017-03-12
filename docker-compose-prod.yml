@@ -7,6 +7,9 @@ services:
       - '80:80'
     links:
       - db
+    volumes:
+      - /backup-server/owncloud:/var/www/html/config
+      - /backup-server/storage:/var/www/html/data
   db:
     image: mariadb:10.1
     expose:
@@ -14,6 +17,7 @@ services:
     volumes:
       - secrets:/secrets
       - ./db:/scripts
+      - /backup-server/mysql:/var/lib/mysql
     depends_on:
       - secrets
     entrypoint: /scripts/secrets-entrypoint.sh
