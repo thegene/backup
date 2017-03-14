@@ -17,6 +17,13 @@ services:
     depends_on:
       - secrets
     entrypoint: /scripts/secrets-entrypoint.sh
+  sync:
+    image: ubuntu:16.04
+    volumes:
+      - ./test_dir:/source
+      - ./sync_test:/target
+      - ./sync:/scripts
+    entrypoint: /scripts/sync.sh
   secrets:
     image: garland/aws-cli-docker
     environment:
