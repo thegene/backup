@@ -34,6 +34,14 @@ services:
       - ./db:/scripts
     entrypoint: []
     command: /scripts/get_secrets.sh
+  sync:
+    image: trsouz/rsync
+    volumes:
+      - /backup-server/storage/data:/source
+      - /backup-server/backup/data:/target
+    entrypoint: /scripts/sync.sh
+    environment:
+      - SYNC=false # switch to run deliberately
 
 volumes:
   secrets:

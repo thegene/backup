@@ -18,12 +18,14 @@ services:
       - secrets
     entrypoint: /scripts/secrets-entrypoint.sh
   sync:
-    image: ubuntu:16.04
+    image: trsouz/rsync
     volumes:
       - ./test_dir:/source
       - ./sync_test:/target
       - ./sync:/scripts
     entrypoint: /scripts/sync.sh
+    environment:
+      - SYNC=false # switch to run deliberately
   secrets:
     image: garland/aws-cli-docker
     environment:
