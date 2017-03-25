@@ -37,8 +37,6 @@ services:
   sync:
     image: trsouz/rsync
     volumes:
-      - /backup-server/storage/data:/source
-      - /backup-server/backup/data:/target
       - ./sync:/scripts
     entrypoint: /scripts/sync.sh
     environment:
